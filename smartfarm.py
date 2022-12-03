@@ -1,35 +1,50 @@
+#This code is the main code operating smarfarm system including led, heater, hu
+#midifier, water pump using the data from dht sensor, spi(soil moist) sensor. 
+#Maintainer: Sangjun Park
+
+#Information about devices and sensors
+#led is controlled by GPIO 27 via relay, and it needs 12V DC power
+#heater is controlled by GPIO 22 via relay, and it needs 12V DC power
+#humidifier is controlled by GPIO 23 via relay, and it needs 5V DC power
+#water pump is controlled by GPIO 17 via relay, and it needs 5V DC power
+
+#data from dht sensor is received via GPIO 4, and this sensor needs 3.3V DC pow
+#er
+#data fromm spi sensor is received via mcp3008chip-GPIO 8, 9, 10, 11 connection
+#, and this sensor needs 3.3V DC power 
+
 import time
 import csv
 from module import led
-from module import dht
 from module import heater
-'''import heat
-import hum
-import led
-import cam'''
+from module import humidifier
+from module import pump
+from module import dht
+from module import spi
 
 
-led = led.led()
-heater = heater.heater()
+
 
 class smartfarm:
 
-    def __init__(self, day=10, start=8, filepath="./Smartfarm_result", 
-        filename="smartfarm_result.csv"):
-        self.day = day
+    def __init__(self, daytime=10, start=8, temp=16, hum=60, moist=0.14,
+        filepath="./Smartfarm_result", filename="smartfarm_result.csv"):
+        
+        self.day = daytime
         self.start = start
+        self.temp = temp
+        self.hum = hum
+        self.moist = moist
+
         self.filepath = filepath
         now = time.localtime()
         date = "%02d.%02d.%02d_" % (now.tm_year, now.tm_mon, now.tm_mday)
         self.filename = date + filename
-        
 
-        '''self.dht = dht
-        self.spi = spi
-        self.heat = heat
-        self.hum = hum
-        self.led = led
-        self.cam = cam'''
+        led = led.led()
+        heater = heater.heater(self.temp)
+        humidifier = humidifier.humidifier(self.hum)
+        pump = pump.pump(self.moist)
 
     def timeset(self):
         while True:
@@ -54,37 +69,56 @@ class smartfarm:
                 break
 
     def makelog(self): #CSV result file 생성
-        
         file = open(self.filepath + self.filename, 'w', newline = '')
         wr = csv.writer(file)
-        wr.writerow(["Time", "led" "Temperature(*C)", "Heater", "Humidity(%)",
-            "Humidifier", "Soil moisture", "Pump"])
+        wr.writerow(["Time", "led","Heater",  "Humidifier", "Pump",
+            "Temperature(*C)", "Humidity(%)", "Soil moisture"])
         file.close()
 
-    #led, dht, heater, humidifier, soil sensor, pump 객체로부터 작동 여부를 입력받아 기록
-    def log(self, led, temp, heater, hum, humidifier, soil, pump):
+    def log(self):
+        #time
         now = time.localtime()
         time = "%02d.%02d.%02d_" % (now.tm_hour, now.tm_min, now.tm_sec)
         
+        #temperature, humidity
+        dht = dht.dht()
+        temp = dht.measure()[0]
+        hum = dht.measure()[1]
+        del dht
+        #soil moist
+        spi = spi.spi()
+        moist = spi.measure()
+        del soil
+
         file = open(self.filepath + self.filename, 'w', newline = '')
         wr = csv.writer(file)
-        wr.writerow([time, led.status(), ]) #시간, led점등, 온도, 히터동작, 습도, 가습기, 토양수분, 펌프동작 작성
+        wr.writerow([time, led.status(), heater.status(), humidifier.status(),
+            pump.status(), temp, hum, soil, moist]) 
         file.close()
     
     
     def operate(self):
         led.operate(self.start, self.start + self.day)
+        heater.operate(self.temp)
+        humidifier.operate(self.hum)
+        pump.operate(self.moist)
         
-        #가습기 동작
-        #관수펌프 동작
-
-
-
+        self.log()
         
-
+        time.sleep(3550)
+        
+        self.timeset()
+  
+    def __del__(self):
+        del led
+        del heater
+        del humidifier
+        del pump
 
 if __name__ == "__main__":
     smartfarm = smartfarm()
+    smartfarm.makelog()
+    smartfarm.operate()
 
 
 
