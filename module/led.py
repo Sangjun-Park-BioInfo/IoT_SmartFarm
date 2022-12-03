@@ -2,6 +2,8 @@ import time
 import RPi.GPIO as GPIO
 
 class led:
+    def __init__(self):
+        self.status = "off"
 
     def GPIOset(self):
         GPIO.setmode(GPIO.BCM)
@@ -11,37 +13,10 @@ class led:
 
     def on(self):
         GPIO.output(27, False)
-
     def off(self):
         GPIO.output(27, True)
 
-    def timeset(self, start, end):
-        while True:
-            try:
-                now = time.localtime()
-                min = int(now.tm_min)
-                if int(now.tm_hour) >= start  and int(now.tm_hour) < end:
-                    self.on()
-                else:
-                    self.off()
-
-                if min  == 0:
-                    break
-                elif min < 30:
-                    time.sleep(1799)
-                elif min < 45:
-                    time.sleep(899)
-                elif min < 55:
-                    time.sleep(179)
-                else:
-                    time.sleep(5)
-
-            except RuntimeError as e:
-                print("RuntimeError: ", e.args)
-            except KeyboardInterrupt:
-                GPIO.output(27, True)
-                break
-
+    
     def test(self):
         self.GPIOset()
         while True:
@@ -55,6 +30,9 @@ class led:
             except KeyboardInterrupt:
                 self.off()
                 break
+    
+    def status(self):
+        return self.status
 
 
     def operate(self, start=8, end=19):
@@ -71,13 +49,14 @@ class led:
                     print("time: %02d:%02d:%02d led: on" % (now.tm_hour,
                         now.tm_min, now.tm_sec))
                     self.on()
-                    time.sleep(3599.9)
+                    self.status = "on"
 
                 else:
                     print("time: %02d:%02d:%02d led: off" % (now.tm_hour,
                         now.tm_min, now.tm_sec))
                     self.off()
-                    time.sleep(3599.9)
+                    self.status = "off"
+                break
             
             except RuntimeError as e:
                 print("RuntimeError: ", e.args)
