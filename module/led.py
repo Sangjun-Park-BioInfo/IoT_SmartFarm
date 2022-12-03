@@ -3,9 +3,7 @@ import RPi.GPIO as GPIO
 
 class led:
     def __init__(self):
-        self.status = "off"
-
-    def GPIOset(self):
+        self.status = "off"  
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
         GPIO.setup(27, GPIO.OUT)
@@ -15,7 +13,6 @@ class led:
         GPIO.output(27, False)
     def off(self):
         GPIO.output(27, True)
-
     
     def test(self):
         self.GPIOset()
@@ -36,9 +33,6 @@ class led:
 
 
     def operate(self, start=8, end=19):
-        
-        self.GPIOset()
-        self.timeset(start, end)
 
         while True:
             try:
@@ -56,10 +50,13 @@ class led:
                         now.tm_min, now.tm_sec))
                     self.off()
                     self.status = "off"
+                time.sleep(3570)
                 break
             
             except RuntimeError as e:
-                print("RuntimeError: ", e.args)
+                print("Led error:", e.args)
             except KeyboardInterrupt:
-                GPIO.output(27, True)
+                self.off()
                 break
+
+    def __del__(self): ()

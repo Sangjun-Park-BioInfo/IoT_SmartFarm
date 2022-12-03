@@ -15,11 +15,12 @@ class dht:
                 hum = self.dht.humidity
                 break
             except RuntimeError as e:
-                continue
+                print("dht error:", e.args)
+                time.sleep(2)
             except KeyboardInterrupt:
                 break
         
-        return (temp, hum)
+        return [temp, hum]
 
     
     def __del__(self): ()
