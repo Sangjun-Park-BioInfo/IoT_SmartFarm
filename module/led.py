@@ -15,7 +15,6 @@ class led:
         GPIO.output(27, True)
     
     def test(self):
-        self.GPIOset()
         while True:
             try:
                 self.on()

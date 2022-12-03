@@ -10,8 +10,8 @@ class pump:
         self.moist = moist
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)    
-        GPIO.setmode(GPIO.BCM)
         GPIO.setup(17, GPIO.OUT)
+        GPIO.setup(17, True)
 
     def on(self):
         GPIO.output(17, False)
