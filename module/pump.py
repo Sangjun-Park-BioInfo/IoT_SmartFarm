@@ -21,10 +21,11 @@ class pump:
         self.status = "off"
 
     def test(self):
-        print("Pump on")
+        print("Pump test")
+        print("pump on")
         self.on()
         time.sleep(5)
-        print("Pump off")
+        print("pump off")
         self.off()
 
     def stat(self):

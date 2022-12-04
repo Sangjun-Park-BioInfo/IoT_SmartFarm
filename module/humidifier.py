@@ -1,4 +1,4 @@
-import dht
+from . import dht
 import time
 import RPi.GPIO as GPIO
 
@@ -21,11 +21,13 @@ class humidifier:
         self.status = "off"
 
     def test(self):
-        print("Humidifier on")
+        print("Humidifier test")
+        print("humidifier on")
         self.on()
         time.sleep(10)
-        print("Humidifier off")
+        print("humidifier off")
         self.off()
+        time.sleep(2)
     
     def stat(self):
         return self.status
