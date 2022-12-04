@@ -23,7 +23,7 @@ class heater:
     def test(self):
         print("Heater on")
         self.on()
-        time.sleep(120)
+        time.sleep(10)
         print("Heater off")
         self.off()
     
