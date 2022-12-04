@@ -23,14 +23,14 @@ class led:
                 self.on()
                 time.sleep(2)
                 self.off()
-                time.sleep(2)
+                ime.sleep(2)
             except RuntimeError as e:
                 print("RuntimeError: ", e.args)
             except KeyboardInterrupt:
                 self.off()
                 break
     
-    def status(self):
+    def stat(self):
         return self.status
 
 

@@ -27,7 +27,7 @@ class humidifier:
         print("Heater off")
         self.off()
     
-    def status(self):
+    def stat(self):
         return self.status
 
     def operate(self):

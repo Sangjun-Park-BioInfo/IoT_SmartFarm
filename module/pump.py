@@ -1,24 +1,24 @@
 import time
-import spi
+from . import spi
 import RPi.GPIO as GPIO
 
 
 class pump:
 
     def __init__(self, moist = 0.14):
-        self.status = "off"
+        self.status = "Off"
         self.moist = moist
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)    
         GPIO.setup(17, GPIO.OUT)
-        GPIO.setup(17, True)
+        GPIO.output(17, True)
 
     def on(self):
         GPIO.output(17, False)
-        self.status = "on"
+        self.status = "On"
     def off(self):
         GPIO.output(17, True)
-        self.status = "off"
+        self.status = "Off"
 
     def test(self):
         print("Pump on")
@@ -27,7 +27,7 @@ class pump:
         print("Pump off")
         self.off()
 
-    def status(self):
+    def stat(self):
         return self.status
 
     def operate(self):

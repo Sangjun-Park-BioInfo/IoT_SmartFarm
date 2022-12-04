@@ -92,8 +92,8 @@ class smartfarm:
 
         file = open(self.filepath + self.filename, 'w', newline = '')
         wr = csv.writer(file)
-        wr.writerow([time, led.status(), heater.status(), humidifier.status(),
-            pump.status(), temp, hum, soil, moist]) 
+        wr.writerow([time, led.stat(), heater.stat(), humidifier.stat(),
+            pump.stat(), temp, hum, soil, moist]) 
         file.close()
     
     
