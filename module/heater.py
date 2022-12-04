@@ -1,4 +1,4 @@
-import dht
+from . import dht
 import time
 import RPi.GPIO as GPIO
 
@@ -53,4 +53,6 @@ class heater:
                 self.off()
                 break
     
-    def __del__(self): () 
+    def __del__(self): 
+        self.off()
+
