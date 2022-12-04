@@ -26,7 +26,7 @@ from module import spi
 class smartfarm:
 
     def __init__(self, daytime=10, start=8, temp=16, hum=60, moist=0.14,
-        filepath="./Smartfarm_result", filename="smartfarm_result.csv"):
+        filepath="./SmartFarm_result/", filename="smartfarm_result.csv"):
         
         self.day = daytime
         self.start = start
@@ -38,6 +38,11 @@ class smartfarm:
         now = time.localtime()
         date = "%02d.%02d.%02d_" % (now.tm_year, now.tm_mon, now.tm_mday)
         self.filename = date + filename
+
+        global led
+        global heater
+        global humidifier
+        global pump
 
         led = led.led()
         heater = heater.heater(self.temp)
@@ -76,22 +81,24 @@ class smartfarm:
     def log(self):
         #time
         now = time.localtime()
-        time = "%02d.%02d.%02d_" % (now.tm_hour, now.tm_min, now.tm_sec)
+        now_time  = "%02d.%02d.%02d_" % (now.tm_hour, now.tm_min, now.tm_sec)
         
         #temperature, humidity
+        global dht 
         dht = dht.dht()
         temp = dht.measure()[0]
         hum = dht.measure()[1]
         del dht
         #soil moist
+        global spi
         spi = spi.spi()
         moist = spi.measure()
-        del soil
+        del spi
 
-        file = open(self.filepath + self.filename, 'w', newline = '')
+        file = open(self.filepath + self.filename, 'a', newline = '')
         wr = csv.writer(file)
-        wr.writerow([time, led.status(), heater.status(), humidifier.status(),
-            pump.status(), temp, hum, soil, moist]) 
+        wr.writerow([now_time, led.stat(), heater.stat(), humidifier.stat(),
+            pump.stat(), temp, hum, moist]) 
         file.close()
     
     
@@ -117,11 +124,7 @@ class smartfarm:
             except KeyboardInterrupt:
                 break
 
-    def __del__(self):
-        del led
-        del heater
-        del humidifier
-        del pump
+    def __del__(self): ()
 
 if __name__ == "__main__":
     smartfarm = smartfarm()

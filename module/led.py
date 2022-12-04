@@ -18,12 +18,17 @@ class led:
         self.status = "off"
     
     def test(self):
-        while True:
+        print("Led test")
+        i = 0
+        while i < 2:
             try:
                 self.on()
-                time.sleep(2)
+                print("led on")
+                time.sleep(1)
                 self.off()
-                ime.sleep(2)
+                print("led off")
+                time.sleep(1)
+                i += 1
             except RuntimeError as e:
                 print("RuntimeError: ", e.args)
             except KeyboardInterrupt:

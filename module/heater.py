@@ -21,12 +21,14 @@ class heater:
         self.status = "off"
 
     def test(self):
+        print("Heater test")
         print("Heater on")
         self.on()
         time.sleep(10)
         print("Heater off")
         self.off()
-    
+        time.sleep(2)
+
     def stat(self):
         return self.status
 
@@ -35,6 +37,7 @@ class heater:
 
         while i < 6:
             try:    
+                global dht
                 dht = dht.dht()
                 data = dht.measure()
                 del dht
