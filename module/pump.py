@@ -49,4 +49,5 @@ class pump:
                 self.off()
                 break
 
-    def __del__(self): ()
+    def __del__(self): 
+        self.off()

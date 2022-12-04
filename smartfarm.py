@@ -20,6 +20,8 @@ from module import heater
 from module import humidifier
 from module import pump
 from module import dht
+from module import spi
+
 
 class smartfarm:
 
