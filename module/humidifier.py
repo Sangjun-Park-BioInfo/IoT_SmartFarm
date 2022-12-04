@@ -21,10 +21,10 @@ class humidifier:
         self.status = "off"
 
     def test(self):
-        print("Heater on")
+        print("Humidifier on")
         self.on()
-        time.sleep(30)
-        print("Heater off")
+        time.sleep(10)
+        print("Humidifier off")
         self.off()
     
     def stat(self):
@@ -53,4 +53,5 @@ class humidifier:
                 self.off()
                 break
     
-    def __del__(self): () 
+    def __del__(self): 
+        self.off()

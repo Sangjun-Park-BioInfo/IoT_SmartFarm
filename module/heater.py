@@ -1,4 +1,4 @@
-import dht
+from . import dht
 import time
 import RPi.GPIO as GPIO
 
@@ -23,7 +23,7 @@ class heater:
     def test(self):
         print("Heater on")
         self.on()
-        time.sleep(120)
+        time.sleep(10)
         print("Heater off")
         self.off()
     
@@ -53,4 +53,6 @@ class heater:
                 self.off()
                 break
     
-    def __del__(self): () 
+    def __del__(self): 
+        self.off()
+

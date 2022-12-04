@@ -23,8 +23,6 @@ from module import dht
 from module import spi
 
 
-
-
 class smartfarm:
 
     def __init__(self, daytime=10, start=8, temp=16, hum=60, moist=0.14,
@@ -92,8 +90,8 @@ class smartfarm:
 
         file = open(self.filepath + self.filename, 'w', newline = '')
         wr = csv.writer(file)
-        wr.writerow([time, led.stat(), heater.stat(), humidifier.stat(),
-            pump.stat(), temp, hum, soil, moist]) 
+        wr.writerow([time, led.status(), heater.status(), humidifier.status(),
+            pump.status(), temp, hum, soil, moist]) 
         file.close()
     
     
@@ -103,12 +101,22 @@ class smartfarm:
         humidifier.operate(self.hum)
         pump.operate(self.moist)
         
-        self.log()
-        
-        time.sleep(3550)
-        
+    def smartfarm(self):   
+        self.operate()
         self.timeset()
-  
+
+        while True:
+            try:
+                self.log()
+                self.operate()
+                time.sleep(3550)
+                self.timeset()
+                
+            except RuntimeError as e:
+                print("smartfarm.py runtimeerror:", e.args)
+            except KeyboardInterrupt:
+                break
+
     def __del__(self):
         del led
         del heater
@@ -118,7 +126,8 @@ class smartfarm:
 if __name__ == "__main__":
     smartfarm = smartfarm()
     smartfarm.makelog()
-    smartfarm.operate()
+    smartfarm.smartfarm()
+    del smartfarm
 
 
 

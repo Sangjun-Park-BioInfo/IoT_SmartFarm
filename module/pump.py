@@ -6,7 +6,7 @@ import RPi.GPIO as GPIO
 class pump:
 
     def __init__(self, moist = 0.14):
-        self.status = "Off"
+        self.status = "off"
         self.moist = moist
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)    
@@ -15,10 +15,10 @@ class pump:
 
     def on(self):
         GPIO.output(17, False)
-        self.status = "On"
+        self.status = "on"
     def off(self):
         GPIO.output(17, True)
-        self.status = "Off"
+        self.status = "off"
 
     def test(self):
         print("Pump on")
@@ -49,4 +49,5 @@ class pump:
                 self.off()
                 break
 
-    def __del__(self): ()
+    def __del__(self): 
+        self.off()
