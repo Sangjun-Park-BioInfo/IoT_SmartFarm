@@ -11,24 +11,26 @@ class led:
 
     def on(self):
         GPIO.output(27, False)
+        self.status = "on"
+
     def off(self):
         GPIO.output(27, True)
+        self.status = "off"
     
     def test(self):
-        self.GPIOset()
         while True:
             try:
                 self.on()
                 time.sleep(2)
                 self.off()
-                time.sleep(2)
+                ime.sleep(2)
             except RuntimeError as e:
                 print("RuntimeError: ", e.args)
             except KeyboardInterrupt:
                 self.off()
                 break
     
-    def status(self):
+    def stat(self):
         return self.status
 
 
@@ -43,13 +45,11 @@ class led:
                     print("time: %02d:%02d:%02d led: on" % (now.tm_hour,
                         now.tm_min, now.tm_sec))
                     self.on()
-                    self.status = "on"
 
                 else:
                     print("time: %02d:%02d:%02d led: off" % (now.tm_hour,
                         now.tm_min, now.tm_sec))
                     self.off()
-                    self.status = "off"
                 time.sleep(3570)
                 break
             
