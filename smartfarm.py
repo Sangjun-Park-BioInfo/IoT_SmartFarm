@@ -19,13 +19,32 @@ from module import led
 from module import heater
 from module import humidifier
 from module import pump
-from module import dht
 from module import spi
+import adafruit_dht
+import board
+
+dht = adafruit_dht.DHT11(board.D4)
+
+def measure():
+    while True:
+        try: 
+            temp = dht.temperature
+            hum = dht.humidity
+            break
+        except RuntimeError as e:
+            print("dht error:", e.args)
+            time.sleep(2)
+        except KeyboardInterrupt:
+            break
+    
+    return [temp, hum]
+
+
 
 
 class smartfarm:
 
-    def __init__(self, daytime=10, start=8, temp=16, hum=60, moist=0.14,
+    def __init__(self, daytime=10, start=8, temp=17, hum=60, moist=0.14,
         filepath="./SmartFarm_result/", filename="smartfarm_result.csv"):
         
         self.day = daytime
@@ -64,7 +83,7 @@ class smartfarm:
                 elif min < 59:
                     time.sleep(59)
                 else:
-                    time.sleep(0.01)
+                    time.sleep(0.1)
 
             except RuntimeError as e:
                 print("RuntimeError from smartfarm.py: ", e.args)
@@ -83,12 +102,6 @@ class smartfarm:
         now = time.localtime()
         now_time  = "%02d.%02d.%02d_" % (now.tm_hour, now.tm_min, now.tm_sec)
         
-        #temperature, humidity
-        global dht 
-        dht = dht.dht()
-        temp = dht.measure()[0]
-        hum = dht.measure()[1]
-        del dht
         #soil moist
         global spi
         spi = spi.spi()
@@ -98,14 +111,14 @@ class smartfarm:
         file = open(self.filepath + self.filename, 'a', newline = '')
         wr = csv.writer(file)
         wr.writerow([now_time, led.stat(), heater.stat(), humidifier.stat(),
-            pump.stat(), temp, hum, moist]) 
+            pump.stat(), measure()[0], measure()[1]]) 
         file.close()
     
     
     def operate(self):
         led.operate(self.start, self.start + self.day)
-        heater.operate(self.temp)
-        humidifier.operate(self.hum)
+        heater.operate(measure()[0])
+        humidifier.operate(measure()[1])
         pump.operate(self.moist)
         
     def smartfarm(self):   

@@ -1,4 +1,4 @@
-from . import dht
+#from . import dht
 import time
 import RPi.GPIO as GPIO
 
@@ -6,7 +6,7 @@ class heater:
 
     def __init__(self, temperature=17):
         self.status = "off"
-        self.temperature = temperature
+        self.target = temperature
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
         GPIO.setup(22, GPIO.OUT)
@@ -32,17 +32,13 @@ class heater:
     def stat(self):
         return self.status
 
-    def operate(self):
+    def operate(self, current_temp):
         i = 0
 
         while i < 6:
             try:    
-                global dht
-                dht = dht.dht()
-                data = dht.measure()
-                del dht
-
-                if data[0] <= self.temperature:
+                
+                if current_temp <= self.target:
                     self.on()
                     self.status = "on"
                 else:

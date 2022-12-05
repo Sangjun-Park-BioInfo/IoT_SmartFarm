@@ -1,4 +1,3 @@
-from . import dht
 import time
 import RPi.GPIO as GPIO
 
@@ -6,7 +5,7 @@ class humidifier:
 
     def __init__(self, humidity=70):
         self.status = "off"
-        self.humidity = humidity
+        self.target = humidity
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
         GPIO.setup(23, GPIO.OUT)
@@ -32,16 +31,12 @@ class humidifier:
     def stat(self):
         return self.status
 
-    def operate(self):
+    def operate(self, current_hum):
         i = 0
 
         while i < 6:
             try:    
-                dht = dht.dht()
-                data = dht.measure()
-                del dht
-
-                if data[1] <= self.humidity:
+                if current_hum <= self.target:
                     self.on()
                     self.status = "on"
                 else:
