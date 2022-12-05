@@ -33,7 +33,6 @@ if __name__ == "__main__":
     
     smartfarm = smartfarm.smartfarm()
     smartfarm.makelog()
-    smartfarm.log()
     
     led = led.led()
     led.test()
