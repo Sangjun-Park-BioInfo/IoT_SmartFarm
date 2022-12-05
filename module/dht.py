@@ -23,4 +23,5 @@ class dht:
         return [temp, hum]
 
     
-    def __del__(self): ()
+    def __del__(self): 
+        del self.dht
