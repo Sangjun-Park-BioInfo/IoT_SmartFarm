@@ -7,13 +7,13 @@ import adafruit_dht
 import board
 from module import spi
 import time
-import RPi.GPIO as GPIO
+import csv
 
 '''GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 GPIO.setup(4, GPIO.IN)'''
-dht = adafruit_dht.DHT11(board.D4)
 
+dht = adafruit_dht.DHT11(board.D4)
 def measure():
     while True:
         try: 
@@ -33,6 +33,25 @@ if __name__ == "__main__":
     
     smartfarm = smartfarm.smartfarm()
     smartfarm.makelog()
+    filepath="./SmartFarm_result/"
+    filename="smartfarm_result.csv"
+
+    now = time.localtime()
+    now_time  = "%02d.%02d.%02d_" % (now.tm_hour, now.tm_min, now.tm_sec)
+    
+    #dht
+    dht_data = measure()
+
+    #soil moist
+    spi = spi.spi()
+    moist = spi.measure()
+    del spi
+
+    file = open(filepath + filename, 'a', newline = '')
+    wr = csv.writer(file)
+    wr.writerow([now_time, led.stat(), heater.stat(), humidifier.stat(),
+        pump.stat(), dht_data[0], dht_data[1]]) 
+    file.close()
     
     led = led.led()
     led.test()
