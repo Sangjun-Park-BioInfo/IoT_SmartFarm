@@ -2,6 +2,9 @@ import time
 from . import spi
 import RPi.GPIO as GPIO
 
+now = time.localtime
+print("time: %02d:%02d:%02d led: on" % (now.tm_hour,
+                        now.tm_min, now.tm_sec))
 
 class pump:
 
@@ -41,8 +44,12 @@ class pump:
 
                 if moist <= self.moist:
                     self.on()
+                    print("time: %02d:%02d:%02d pump: on" % (now.tm_hour,
+                        now.tm_min, now.tm_sec))
                     time.sleep(5)
                     self.off()
+                    print("time: %02d:%02d:%02d pump: off" % (now.tm_hour,
+                        now.tm_min, now.tm_sec))
                 break
             except RuntimeError as e:
                 print("Pump error:", e.args)

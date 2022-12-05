@@ -3,11 +3,30 @@ from module import led
 from module import heater
 from module import humidifier
 from module import pump
-from module import dht
+import adafruit_dht
+import board
 from module import spi
 import time
 
+dht = adafruit_dht.DHT11(board.D4)
+
+def measure():
+    while True:
+        try: 
+            temp = dht.temperature
+            hum = dht.humidity
+            break
+        except RuntimeError as e:
+            print("dht error:", e.args)
+            time.sleep(2)
+        except KeyboardInterrupt:
+            break
+    
+    return [temp, hum]
+
+
 if __name__ == "__main__":
+    
     smartfarm = smartfarm.smartfarm()
     smartfarm.makelog()
     smartfarm.log()
@@ -36,10 +55,8 @@ if __name__ == "__main__":
 
     print("====================")
     print("dht sensor test")
-
-    dht = dht.dht()
-    print(dht.measure())
-    #del dht
+    print("Temp: %2d*C Humid: %2d%" % (measure()[0], measure()[1]))
+    
     time.sleep(2)
 
     print("====================")
