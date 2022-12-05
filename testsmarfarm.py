@@ -7,7 +7,11 @@ import adafruit_dht
 import board
 from module import spi
 import time
+import RPi.GPIO as GPIO
 
+'''GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+GPIO.setup(4, GPIO.IN)'''
 dht = adafruit_dht.DHT11(board.D4)
 
 def measure():
@@ -22,7 +26,7 @@ def measure():
         except KeyboardInterrupt:
             break
     
-    return [temp, hum]
+    return (temp, hum)
 
 
 if __name__ == "__main__":
@@ -55,7 +59,8 @@ if __name__ == "__main__":
 
     print("====================")
     print("dht sensor test")
-    print("Temp: %2d*C Humid: %2d%" % (measure()[0], measure()[1]))
+    dht_data = dht.measure()
+    print("Temp: %2d*C Humid: %2d%" % (dht_data[0], dht_data[1]))
     
     time.sleep(2)
 

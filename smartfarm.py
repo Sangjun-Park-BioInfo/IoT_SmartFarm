@@ -37,7 +37,7 @@ def measure():
         except KeyboardInterrupt:
             break
     
-    return [temp, hum]
+    return (temp, hum)
 
 
 
@@ -102,6 +102,9 @@ class smartfarm:
         now = time.localtime()
         now_time  = "%02d.%02d.%02d_" % (now.tm_hour, now.tm_min, now.tm_sec)
         
+        #dht
+        dht_data = measure()
+
         #soil moist
         global spi
         spi = spi.spi()
@@ -111,14 +114,15 @@ class smartfarm:
         file = open(self.filepath + self.filename, 'a', newline = '')
         wr = csv.writer(file)
         wr.writerow([now_time, led.stat(), heater.stat(), humidifier.stat(),
-            pump.stat(), measure()[0], measure()[1]]) 
+            pump.stat(), dht_data[0], dht_data[1]]) 
         file.close()
     
     
     def operate(self):
+        dht_data = measure()
         led.operate(self.start, self.start + self.day)
-        heater.operate(measure()[0])
-        humidifier.operate(measure()[1])
+        heater.operate(dht_data[0])
+        humidifier.operate(dht_data[1])
         pump.operate(self.moist)
         
     def smartfarm(self):   

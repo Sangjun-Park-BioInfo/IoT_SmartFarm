@@ -2,9 +2,6 @@ import time
 from . import spi
 import RPi.GPIO as GPIO
 
-now = time.localtime
-print("time: %02d:%02d:%02d led: on" % (now.tm_hour,
-                        now.tm_min, now.tm_sec))
 
 class pump:
 
@@ -44,6 +41,7 @@ class pump:
 
                 if moist <= self.moist:
                     self.on()
+                    now = time.localtime
                     print("time: %02d:%02d:%02d pump: on" % (now.tm_hour,
                         now.tm_min, now.tm_sec))
                     time.sleep(5)
