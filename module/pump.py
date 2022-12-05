@@ -7,7 +7,7 @@ class pump:
 
     def __init__(self, moist = 0.14):
         self.status = "off"
-        self.moist = moist
+        self.target = moist
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)    
         GPIO.setup(17, GPIO.OUT)
@@ -31,15 +31,16 @@ class pump:
     def stat(self):
         return self.status
 
-    def operate(self):
+    def operate(self, moist):
         
         while True:
             try:
+                global spi
                 spi = spi.spi()    
                 moist = spi.measure()
                 del spi
 
-                if moist <= self.moist:
+                if moist <= self.target:
                     self.on()
                     now = time.localtime
                     print("time: %02d:%02d:%02d pump: on" % (now.tm_hour,
