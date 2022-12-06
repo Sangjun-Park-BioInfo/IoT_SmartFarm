@@ -18,20 +18,7 @@ GPIO.setup(4, GPIO.IN)'''
 dht = adafruit_dht.DHT11(board.D4)
 
 if __name__ == "main": 
-    
-    def measure():
-        while True:
-            try: 
-                temp = dht.temperature
-                hum = dht.humidity
-                break
-            except RuntimeError as e:
-                print("dht error:", e.args)
-                time.sleep(2)
-            except KeyboardInterrupt:
-                break
-
-        return (temp, hum)
+    dht = adafruit_dht.DHT11(board.D4)
 
     smartfarm = smartfarm.smartfarm()
     smartfarm.makelog()
@@ -42,7 +29,7 @@ if __name__ == "main":
     now_time  = "%02d.%02d.%02d_" % (now.tm_hour, now.tm_min, now.tm_sec)
 
 #dht
-    dht_data = measure()
+    dht_data = smartfarm.measure()
 
 #soil moist
     spi = spi.spi()
@@ -79,7 +66,7 @@ if __name__ == "main":
 
     print("====================")
     print("dht sensor test")
-    dht_data = dht.measure()
+    dht_data = smartfarm.measure()
     print("Temp: %2d*C Humid: %2d%" % (dht_data[0], dht_data[1]))
 
     time.sleep(2)

@@ -31,16 +31,16 @@ class pump:
     def stat(self):
         return self.status
 
-    def operate(self, moist):
+    def operate(self):
         
         while True:
             try:
                 global spi
                 spi = spi.spi()    
-                moist = spi.measure()
+                current_moist = spi.measure()
                 del spi
 
-                if moist <= self.target:
+                if current_moist <= self.target:
                     self.on()
                     now = time.localtime
                     print("time: %02d:%02d:%02d pump: on" % (now.tm_hour,

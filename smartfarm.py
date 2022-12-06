@@ -23,26 +23,22 @@ from module import spi
 import adafruit_dht
 import board
 
-dht = adafruit_dht.DHT11(board.D4)
-
-def measure():
-    while True:
-        try: 
-            temp = dht.temperature
-            hum = dht.humidity
-            break
-        except RuntimeError as e:
-            print("dht error:", e.args)
-            time.sleep(2)
-        except KeyboardInterrupt:
-            break
-    
-    return (temp, hum)
-
-
-
-
 class smartfarm:
+
+    def measure():
+        while True:
+            try: 
+                temp = dht.temperature
+                hum = dht.humidity
+                break
+            except RuntimeError as e:
+                print("dht error:", e.args)
+                time.sleep(2)
+            except KeyboardInterrupt:
+                break
+        
+        return (temp, hum)
+
 
     def __init__(self, daytime=10, start=8, temp=17, hum=60, moist=0.14,
         filepath="./SmartFarm_result/", filename="smartfarm_result.csv"):
@@ -103,7 +99,7 @@ class smartfarm:
         now_time  = "%02d.%02d.%02d_" % (now.tm_hour, now.tm_min, now.tm_sec)
         
         #dht
-        dht_data = measure()
+        dht_data = self.measure()
 
         #soil moist
         global spi
@@ -119,7 +115,7 @@ class smartfarm:
     
     
     def operate(self):
-        dht_data = measure()
+        dht_data = self.measure()
         led.operate(self.start, self.start + self.day)
         heater.operate(dht_data[0])
         humidifier.operate(dht_data[1])
@@ -144,6 +140,7 @@ class smartfarm:
     def __del__(self): ()
 
 if __name__ == "__main__":
+    dht = adafruit_dht.DHT11(board.D4)
     smartfarm = smartfarm()
     smartfarm.makelog()
     smartfarm.smartfarm()
