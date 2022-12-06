@@ -1,8 +1,6 @@
 import time
 import RPi.GPIO as GPIO
 
-now = time.localtime()
-
 class humidifier:
 
     def __init__(self, humidity=70):
@@ -36,13 +34,15 @@ class humidifier:
     def operate(self, current_hum):
         while True:
             try:    
+                now = time.localtime()
+                
                 if current_hum <= self.target:
                     self.on()
                     print("time: %02d:%02d:%02d humidifier: on" % (now.tm_hour,
                         now.tm_min, now.tm_sec))
                 else:
                     self.off()
-                    print("time: %02d:%02d:%02d heater: off" % (now.tm_hour,
+                    print("time: %02d:%02d:%02d humidifier: off" % (now.tm_hour,
                         now.tm_min, now.tm_sec))
                 break
             except RuntimeError as e:

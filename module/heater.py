@@ -1,8 +1,6 @@
 import time
 import RPi.GPIO as GPIO
 
-now = time.localtime()
-
 class heater:
 
     def __init__(self, temperature=17):
@@ -36,13 +34,15 @@ class heater:
     def operate(self, current_temp):
         while True:        
             try:    
+                now = time.localtime()
+                
                 if current_temp <= self.target:
                     self.on()
                     print("time: %02d:%02d:%02d heater: on" % (now.tm_hour,
                         now.tm_min, now.tm_sec))
                 else:
                     self.off()
-                    print("time: %02d:%02d:%02d heater: on" % (now.tm_hour,
+                    print("time: %02d:%02d:%02d heater: off" % (now.tm_hour,
                         now.tm_min, now.tm_sec))
                 break
             except RuntimeError as e:

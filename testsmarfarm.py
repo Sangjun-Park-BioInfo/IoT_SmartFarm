@@ -15,9 +15,8 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 GPIO.setup(4, GPIO.IN)'''
 
-dht = adafruit_dht.DHT11(board.D4)
-
 if __name__ == "main": 
+    
     dht = adafruit_dht.DHT11(board.D4)
 
     smartfarm = smartfarm.smartfarm()
