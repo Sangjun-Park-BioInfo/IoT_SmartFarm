@@ -55,7 +55,6 @@ class led:
                     print("time: %02d:%02d:%02d led: off" % (now.tm_hour,
                         now.tm_min, now.tm_sec))
                     self.off()
-                time.sleep(3570)
                 break
             
             except RuntimeError as e:

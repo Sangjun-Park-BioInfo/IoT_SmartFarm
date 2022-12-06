@@ -7,7 +7,7 @@ class pump:
 
     def __init__(self, moist = 0.14):
         self.status = "off"
-        self.moist = moist
+        self.target = moist
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)    
         GPIO.setup(17, GPIO.OUT)
@@ -35,14 +35,20 @@ class pump:
         
         while True:
             try:
+                global spi
                 spi = spi.spi()    
-                moist = spi.measure()
+                current_moist = spi.measure()
                 del spi
 
-                if moist <= self.moist:
+                if current_moist <= self.target:
                     self.on()
+                    now = time.localtime
+                    print("time: %02d:%02d:%02d pump: on" % (now.tm_hour,
+                        now.tm_min, now.tm_sec))
                     time.sleep(5)
                     self.off()
+                    print("time: %02d:%02d:%02d pump: off" % (now.tm_hour,
+                        now.tm_min, now.tm_sec))
                 break
             except RuntimeError as e:
                 print("Pump error:", e.args)
