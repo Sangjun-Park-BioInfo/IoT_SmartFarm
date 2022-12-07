@@ -45,7 +45,7 @@ class smartfarm:
 
 
     def __init__(self, daytime=10, start=8, temp=16, hum=60, moist=0.20,
-        filepath="./SmartFarm_result/", filename="smartfarm_log.csv"):
+        filepath="../IoT_SmartFarm_result/", filename="smartfarm_log.csv"):
         
         self.day = daytime
         self.start = start
