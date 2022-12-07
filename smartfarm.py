@@ -36,7 +36,6 @@ class smartfarm:
                 break
             except RuntimeError as e:
                 print("dht error:", e.args)
-                time.sleep(2)
             except KeyboardInterrupt:
                 break
             except OverflowError:

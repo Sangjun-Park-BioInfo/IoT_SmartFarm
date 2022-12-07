@@ -35,16 +35,21 @@ class pump:
         
         while True:
             try:
-                global spi
-                spi = spi.spi()    
-                current_moist = spi.measure()
-                del spi
+                current_spi = spi.spi()    
+                current_moist = current_spi.measure()
+                del current_spi
 
                 if current_moist <= self.target:
                     self.on()
-                    now = time.localtime
+                    now = time.localtime()
                     print("time: %02d:%02d:%02d pump: on" % (now.tm_hour,
                         now.tm_min, now.tm_sec))
+                    
+                    file.open("./SmartFarm_result/pump_log.txt", 'a')
+                    file.write("time: %02d:%02d:%02d pump: on" % (now.tm_hour,
+                        now.tm_min, now.tm_sec))
+                    file.close()
+                    
                     time.sleep(5)
                     self.off()
                     print("time: %02d:%02d:%02d pump: off" % (now.tm_hour,
