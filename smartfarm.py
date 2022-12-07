@@ -39,7 +39,7 @@ class smartfarm:
             except KeyboardInterrupt:
                 break
             except OverflowError:
-                print("dht overflowerrot")
+                print("dht overflowerror")
         
         return (temp, hum)
 
