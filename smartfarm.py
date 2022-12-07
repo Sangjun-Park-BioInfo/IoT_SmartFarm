@@ -104,15 +104,10 @@ class smartfarm:
     def log(self):
         #time
         now = self.time()
-        now_time  = "%02d.%02d.%02d" % (now.tm_hour, now.tm_min, now.tm_sec)
+        now_time  = "%02d:%02d:%02d" % (now.tm_hour, now.tm_min, now.tm_sec)
         
         #dht
         dht_data = self.measure()
-
-        '''#soil moist
-        current_spi = spi.spi()
-        moist = current_spi.measure()
-        del spi'''
 
         file = open(self.filepath + self.filename, 'a', newline = '')
         wr = csv.writer(file)
