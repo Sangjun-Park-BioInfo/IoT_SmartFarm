@@ -45,7 +45,7 @@ class pump:
                     print("time: %02d:%02d:%02d pump: on" % (now.tm_hour,
                         now.tm_min, now.tm_sec))
                     
-                    file.open("./SmartFarm_result/pump_log.txt", 'a')
+                    file.open("../../IoT_SmartFarm_result/pump_log.txt", 'a')
                     file.write("time: %02d:%02d:%02d pump: on" % (now.tm_hour,
                         now.tm_min, now.tm_sec))
                     file.close()
