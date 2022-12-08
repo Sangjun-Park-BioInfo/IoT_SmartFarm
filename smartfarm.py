@@ -74,13 +74,13 @@ class smartfarm:
                 if min % 10  == 0:
                     break
                 elif min % 10 < 2:
+                    print("time: %02d:%02d:%02d" % (now.tm_hour, now.tm_min,
+                        now.tm_sec), self.measure())
                     time.sleep(360)
-                    print("time: %02d:%02d:%02d" % (now.tm_hour, now.tm_min,
-                        now.tm_sec), self.measure())
                 elif min % 10 < 8:
-                    time.sleep(60)
                     print("time: %02d:%02d:%02d" % (now.tm_hour, now.tm_min,
                         now.tm_sec), self.measure())
+                    time.sleep(60)
                 else:
                     time.sleep(0.1)
 
